@@ -1,18 +1,41 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import { useColorScheme } from 'react-native';
+import { Stack } from 'expo-router';
+import { useEffect } from 'react';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { useAuthStore } from '../stores/authStore';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import { AnimatedSplashOverlay } from '@/components/animated-icon';
-import AppTabs from '@/components/app-tabs';
+export default function RootLayout() {
+  useEffect(() => {
+    const checkAuth = async () => {
+      const authStorage = await AsyncStorage.getItem('auth-storage');
+      if (authStorage) {
+        try {
+          const parsed = JSON.parse(authStorage);
+          if (parsed?.state?.user && parsed?.state?.token) {
+            useAuthStore.setState({
+              user: parsed.state.user,
+              token: parsed.state.token,
+              isAuthenticated: true,
+            });
+          }
+        } catch (error) {
+          console.error('Failed to parse auth storage:', error);
+        }
+      }
+    };
+    checkAuth();
+  }, []);
 
-SplashScreen.preventAutoHideAsync();
-
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <AnimatedSplashOverlay />
-      <AppTabs />
-    </ThemeProvider>
+    // SafeAreaProvider at the root level ensures every screen — including those
+    // inside the tab navigator — receives correct safe-area inset values on both
+    // Android (status bar) and iOS (notch / Dynamic Island / home indicator).
+    <SafeAreaProvider>
+      <Stack screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="index" />
+        <Stack.Screen name="login" />
+        <Stack.Screen name="(tabs)" />
+      </Stack>
+    </SafeAreaProvider>
   );
 }
