@@ -18,8 +18,13 @@
       "package": "com.idealsmartsolution.portaldevmobile",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/android-icon-foreground.png",
-        "backgroundColor": "#3B82F6"
+        "backgroundColor": "#FFFFFF"
       }
+    },
+    "androidStatusBar": {
+      "backgroundColor": "#FFFFFF",
+      "barStyle": "dark-content",
+      "translucent": false
     },
     "web": {
       "favicon": "./assets/images/favicon.png",
@@ -32,7 +37,7 @@
         {
           "image": "./assets/images/icon.png",
           "resizeMode": "contain",
-          "backgroundColor": "#3B82F6"
+          "backgroundColor": "#FFFFFF"
         }
       ]
     ],

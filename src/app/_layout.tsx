@@ -1,6 +1,7 @@
 import { Stack } from 'expo-router';
 import { useEffect } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { StatusBar } from 'expo-status-bar';
 import { useAuthStore } from '../stores/authStore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -27,10 +28,19 @@ export default function RootLayout() {
   }, []);
 
   return (
-    // SafeAreaProvider at the root level ensures every screen — including those
-    // inside the tab navigator — receives correct safe-area inset values on both
-    // Android (status bar) and iOS (notch / Dynamic Island / home indicator).
     <SafeAreaProvider>
+      {/*
+       * StatusBar at root level applies to every screen in the app.
+       * backgroundColor sets the bar color on Android.
+       * style="light" makes the icons/text on the bar white (like WhatsApp).
+       * translucent={false} ensures the bar occupies real space and content
+       * starts below it — no overlap.
+       */}
+      <StatusBar
+        backgroundColor="#FFFFFF"
+        style="dark"
+        translucent={false}
+      />
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="index" />
         <Stack.Screen name="login" />
